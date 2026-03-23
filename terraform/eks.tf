@@ -7,7 +7,6 @@ module "eks" {
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
-  subnet_ids = var.subnet_ids
   endpoint_public_access  = true
   endpoint_private_access = true   # keep private for VPC workloads
   public_access_cidrs     = ["0.0.0.0/0"] # or restrict to GitHub runner IPs
