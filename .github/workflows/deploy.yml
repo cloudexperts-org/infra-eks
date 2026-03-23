@@ -33,12 +33,9 @@ jobs:
         run: |
           rm -rf .terraform
           rm -f .terraform.lock.hcl
-          terraform init -upgrade
 
-      - name: Terraform Init
-        run: |
-          terraform init -reconfigure
-          terraform state list
+      - name: Terraform Init (fresh + upgrade)
+        run: terraform init -upgrade -reconfigure
 
       - name: Terraform Validate
         run: terraform validate
