@@ -4,6 +4,15 @@ module "eks" {
   version = "20.3.0"
   cluster_name    = var.cluster_name
   cluster_version = "1.35"
+  manage_aws_auth = true
+
+  aws_auth_roles = [
+    {
+      rolearn  = "arn:aws:iam::865809098262:user/akash"
+      username = "github-actions"
+      groups   = ["system:masters"]
+    }
+  ]
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
