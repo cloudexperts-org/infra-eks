@@ -10,13 +10,12 @@ module "eks" {
 
   eks_managed_node_groups = {
     default = {
-      desired_size = 2
-      min_size     = 1
-      max_size     = 3
+      desired_size   = 2
+      min_size       = 1
+      max_size       = 3
       instance_types = ["t3.medium"]
     }
   }
 
-  # Disable GPU/Elastic Inference to avoid module errors
-  enable_irsa = true
+  enable_irsa = true  # required for service accounts
 }
