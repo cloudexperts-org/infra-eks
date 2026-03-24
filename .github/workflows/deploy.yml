@@ -29,6 +29,11 @@ jobs:
         with:
           terraform_version: 1.5.7
 
+      - name: Check file permissions
+        run: |
+          sudo chown -R $USER:$USER .
+          sudo chmod -R u+rwX .
+             
       - name: Terraform Init (fresh + upgrade)
         run: |
           rm -rf .terraform
