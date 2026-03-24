@@ -1,6 +1,6 @@
 # Root / general
 cluster_name = "my-eks-cluster"
-region       = "ap-southeast-1"
+region = "ap-southeast-1"
 
 # VPC Module
 vpc_cidr = "10.0.0.0/16"
