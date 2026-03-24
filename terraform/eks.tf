@@ -5,14 +5,6 @@ module "eks" {
   cluster_name    = var.cluster_name
   cluster_version = "1.35"
 
-  map_users = [
-    {
-      user_arn  = "arn:aws:iam::865809098262:user/akash"
-      username  = "github-actions"
-      groups    = ["system:masters"]
-    }
-  ]
-
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
   cluster_endpoint_private_access       = true
@@ -29,4 +21,19 @@ module "eks" {
   }
 
   enable_irsa = true
+}
+
+# Add AWS Auth separately
+module "aws_auth" {
+  source        = "terraform-aws-modules/eks/aws//modules/aws-auth"
+  cluster_name  = module.eks.cluster_name
+  cluster_endpoint = module.eks.cluster_endpoint
+
+  map_users = [
+    {
+      user_arn  = "arn:aws:iam::865809098262:user/akash"
+      username  = "github-actions"
+      groups    = ["system:masters"]
+    }
+  ]
 }
