@@ -1,15 +1,16 @@
 output "cluster_name" {
-  value = aws_eks_cluster.this[0].name
+  value = module.this_eks.cluster_name
 }
 
 output "cluster_arn" {
-  value = aws_eks_cluster.this[0].arn
+  value = module.this_eks.cluster_arn
 }
 
+
 output "eks_managed_node_group_names" {
-  value = [for ng in aws_eks_node_group.this : ng.node_group_name]
+  value = module.this_eks.eks_managed_node_groups
 }
 
 output "eks_managed_node_group_arns" {
-  value = [for ng in aws_eks_node_group.this : ng.arn]
+  value = module.this_eks.eks_managed_node_groups
 }
