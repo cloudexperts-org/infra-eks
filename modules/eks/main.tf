@@ -14,16 +14,14 @@ module "eks" {
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
-
-  cluster_iam_role_arn  = var.cluster_iam_role_arn
-
-  node_groups = {
+ 
+  eks_managed_node_groups = {
     default = {
       desired_capacity = var.desired_capacity
       min_size         = var.min_capacity
       max_size         = var.max_capacity
       instance_types   = [var.instance_type]
-      # iam_role_arn = var.node_group_role_arn  # optional
+      # iam_role_arn   = var.node_group_role_arn # optional
     }
   }
 
