@@ -7,6 +7,7 @@ module "eks" {
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
+
   cluster_endpoint_private_access       = true
   cluster_endpoint_public_access        = true
   cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
@@ -21,19 +22,21 @@ module "eks" {
   }
 
   enable_irsa = true
-}
 
-# Add AWS Auth separately
-module "aws_auth" {
-  source           = "terraform-aws-modules/eks/aws//modules/aws-auth"
-  cluster_name     = module.eks.cluster_name
-  cluster_endpoint = module.eks.cluster_endpoint
+  # ✅ REQUIRED in v20+
+  access_entries = {
+    github-actions = {
+      principal_arn = "arn:aws:iam::865809098262:user/akash"
 
-  map_users = [
-    {
-      user_arn = "arn:aws:iam::865809098262:user/akash"
-      username = "github-actions"
-      groups   = ["system:masters"]
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
     }
-  ]
+  }
 }
