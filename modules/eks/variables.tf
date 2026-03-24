@@ -11,7 +11,7 @@ variable "vpc_id" {
   type = string
 }
 
-variable "public_subnet_ids" {
+variable "subnet_ids" {
   type = list(string)
 }
 
@@ -42,3 +42,6 @@ variable "instance_type" {
   type    = string
   default = "t3.medium"
 }
+
+
+variable "eks_managed_node_groups" {}

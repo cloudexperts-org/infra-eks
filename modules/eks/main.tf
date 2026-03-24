@@ -7,7 +7,7 @@ module "eks" {
 
   # Provide VPC and subnets
   vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.public_subnet_ids
+  subnet_ids = var.subnet_ids
 
   # Managed node groups (v20 syntax)
   eks_managed_node_groups = {
