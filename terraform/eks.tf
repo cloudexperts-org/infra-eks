@@ -25,6 +25,7 @@ module "eks" {
   }
 
   enable_irsa = true
+}
 
 # Add users to aws-auth using separate module
 module "aws_auth" {
