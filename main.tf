@@ -11,11 +11,18 @@ module "iam" {
 }
 
 module "eks" {
-  source               = "./modules/eks"
-  cluster_name         = var.cluster_name
-  region               = "ap-southeast-1"
-  vpc_id               = module.vpc.vpc_id
-  public_subnet_ids    = module.vpc.public_subnet_ids
-  eks_cluster_role_arn = module.iam.eks_cluster_role_arn
-  eks_node_role_arn    = module.iam.eks_node_role_arn
+  source = "./modules/eks"
+  cluster_name = var.cluster_name
+  vpc_id       = module.vpc.vpc_id
+  subnet_ids   = module.vpc.public_subnet_ids
+
+  eks_managed_node_groups = {
+    default = {
+      desired_capacity = 2
+      min_size         = 1
+      max_size         = 3
+      instance_types   = ["t3.medium"]
+    }
+  }
 }
+
