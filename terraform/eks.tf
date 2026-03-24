@@ -25,22 +25,14 @@ module "eks" {
   }
 
   enable_irsa = true
-}
 
-# aws-auth mapping
-module "aws_auth" {
-  source = "terraform-aws-modules/eks/aws//modules/aws-auth"
-  version = "20.3.0"
-
-  cluster_name                       = module.eks.cluster_name
-  cluster_endpoint                   = module.eks.cluster_endpoint
-  cluster_certificate_authority_data  = module.eks.cluster_certificate_authority_data
-
-  map_users = [
+  # Add your IAM user directly here
+  aws_auth_users = [
     {
       user_arn = "arn:aws:iam::865809098262:user/akash"
       username = "akash"
       groups   = ["system:masters"]
     }
   ]
+
 }
