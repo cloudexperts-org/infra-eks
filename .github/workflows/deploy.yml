@@ -36,9 +36,9 @@ jobs:
              
       - name: Terraform Init (fresh + upgrade)
         run: |
-          rm -rf .terraform
-          rm -f .terraform.lock.hcl
-          terraform init -upgrade -reconfigure
+          sudo rm -rf .terraform
+          sudo rm -f .terraform.lock.hcl
+          sudo terraform init -upgrade -reconfigure
 
       - name: Terraform Validate
         run: terraform validate
