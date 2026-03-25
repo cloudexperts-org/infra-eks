@@ -54,7 +54,3 @@ variable "aws_auth_roles" {
   }))
   default = []
 }
-
-output "managed_node_groups_iam_role_arns" {
-  value = { for k, v in aws_eks_node_group.this : k => v.iam_role_arn }
-}
