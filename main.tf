@@ -13,16 +13,7 @@ module "eks" {
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
-  manage_aws_auth_configmap = true
-
-  aws_auth_roles = [
-  {
-    rolearn  = "arn:aws:iam::865809098262:role/GitHubRunnerRole"
-    username = "github"
-    groups   = ["system:masters"]
-  }
-]
-
+  
 }
 
 module "iam" {

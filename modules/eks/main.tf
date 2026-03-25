@@ -11,8 +11,6 @@ module "this_eks" {
   cluster_endpoint_public_access  = var.cluster_endpoint_public_access
   cluster_endpoint_private_access = var.cluster_endpoint_private_access
 
-  manage_aws_auth_configmap = true
-  aws_auth_roles = var.aws_auth_roles
 
   eks_managed_node_groups = {
     default = {
