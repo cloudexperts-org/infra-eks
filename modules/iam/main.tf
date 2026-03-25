@@ -1,10 +1,16 @@
+
+
 # Access Entry for akash
+
+resource "time_sleep" "wait_for_eks" {
+  create_duration = "60s"
+}
 
 resource "aws_eks_access_entry" "akash" {
   cluster_name  = var.cluster_name
   principal_arn = "arn:aws:iam::865809098262:user/akash"
 
-  depends_on = [module.eks]  # or aws_eks_cluster.this
+   depends_on = [time_sleep.wait_for_eks]
 
 }
 
