@@ -18,5 +18,5 @@ module "this_eks" {
   }
 
   enable_irsa = true
-  create_kms_key = false
+
 }
