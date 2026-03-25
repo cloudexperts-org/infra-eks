@@ -9,6 +9,8 @@ resource "aws_eks_access_entry" "akash" {
   cluster_name  = var.cluster_name
   principal_arn = "arn:aws:iam::865809098262:user/akash"
 
+  depends_on = [module.eks]  # or aws_eks_cluster.this
+
 }
 
 resource "aws_eks_access_policy_association" "akash_admin" {
@@ -20,6 +22,8 @@ resource "aws_eks_access_policy_association" "akash_admin" {
   access_scope {
     type = "cluster"
   }
+
+  depends_on = [aws_eks_access_entry.akash]
 
 }
 
