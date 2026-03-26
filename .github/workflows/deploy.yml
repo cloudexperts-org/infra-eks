@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["Infra"]
+    types:
+      - completed
+
+jobs:
+  aws-auth:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: infra/envs/dev   # or make dynamic
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Apply aws-auth
+        run: terraform apply -auto-approve
