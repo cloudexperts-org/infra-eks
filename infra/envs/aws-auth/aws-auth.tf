@@ -1,3 +1,4 @@
+# Pull outputs from EKS deployment remote state
 data "terraform_remote_state" "eks" {
   backend = "s3"
 
@@ -8,6 +9,7 @@ data "terraform_remote_state" "eks" {
   }
 }
 
+# Fetch EKS cluster details
 data "aws_eks_cluster" "this" {
   name = data.terraform_remote_state.eks.outputs.cluster_name
 }
@@ -16,12 +18,15 @@ data "aws_eks_cluster_auth" "this" {
   name = data.terraform_remote_state.eks.outputs.cluster_name
 }
 
+# Kubernetes provider
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.this.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.this.token
 }
 
+
+# AWS Auth ConfigMap for nodes + GitHub Actions
 resource "kubernetes_config_map_v1" "aws_auth" {
   metadata {
     name      = "aws-auth"
@@ -42,7 +47,7 @@ resource "kubernetes_config_map_v1" "aws_auth" {
 
       # GitHub Actions role
       {
-        rolearn  = "arn:aws:iam::865809098262:role/GitHubRunnerRole"
+        rolearn  = var.github_runner_role_arn
         username = "github"
         groups   = ["system:masters"]
       }
