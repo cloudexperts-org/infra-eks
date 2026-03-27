@@ -13,18 +13,18 @@ provider "aws" {
   region = "ap-southeast-1"
 }
 
-variable "cluster_name" {
-  default = data.terraform_remote_state.eks.outputs.cluster_name
+# Local for cluster name
+locals {
+  cluster_name = data.terraform_remote_state.eks.outputs.cluster_name
 }
-
 
 # EKS data sources
 data "aws_eks_cluster" "eks" {
-  name = var.cluster_name
+  name = local.cluster_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = var.cluster_name
+  name = local.cluster_name
 }
 
 # Kubernetes provider
