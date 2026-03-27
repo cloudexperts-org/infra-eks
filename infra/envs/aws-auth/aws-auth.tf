@@ -2,9 +2,9 @@ data "terraform_remote_state" "eks" {
   backend = "s3"
 
   config = {
-    bucket = "cloudex-terraform-state-bucket"
-    key    = "eks/cluster/terraform.tfstate"
-    region = "ap-southeast-1"
+    bucket    = "cloudex-terraform-state-bucket"
+    key       = "eks/dev/terraform.tfstate"  # match actual S3 object
+    region    = "ap-southeast-1"
   }
 }
 

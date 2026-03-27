@@ -1,13 +1,13 @@
 name: Deploy aws-auth
 
-#on:
-#  workflow_dispatch:
-
 on:
-  workflow_run:
-    workflows: ["Deploy Infrastructure"]
-    types:
-      - completed
+  workflow_dispatch:
+
+#on:
+#  workflow_run:
+#    workflows: ["Deploy Infrastructure"]
+#    types:
+#      - completed
 
 permissions:
   id-token: write
