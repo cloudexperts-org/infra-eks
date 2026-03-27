@@ -30,7 +30,6 @@ data "aws_eks_cluster_auth" "eks" {
 
 # Kubernetes provider
 provider "kubernetes" {
-  alias                  = "eks"
   host                   = data.aws_eks_cluster.eks.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.eks.token
@@ -38,7 +37,7 @@ provider "kubernetes" {
 
 # Helm provider (uses default Kubernetes provider)
 provider "helm" {
-  # optional: can leave empty if using default Kubernetes provider
+  # empty, will use default Kubernetes provider above
 }
 
 # Helm release for ArgoCD
@@ -48,7 +47,4 @@ resource "helm_release" "argocd" {
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
   create_namespace = true
-
-  # assign Kubernetes provider explicitly
-  provider = helm
 }
