@@ -2,15 +2,12 @@ name: Deploy aws-auth
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to destroy'
-        required: true
-        type: choice
-        options:
-          - dev
-          - stage
-          - prod
+
+#on:
+#  workflow_run:
+#    workflows: ["Deploy Infrastructure"]
+#    types:
+#      - completed
 
 permissions:
   id-token: write
