@@ -31,7 +31,4 @@ resource "helm_release" "argocd" {
   chart            = "argo-cd"
   create_namespace = true
 
-  depends_on = [
-    kubernetes_config_map.aws_auth
-  ]
 }
