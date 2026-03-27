@@ -12,27 +12,26 @@ provider "aws" {
   region = "ap-southeast-1"
 }
 
-# Get cluster name from remote state
-locals {
-  cluster_name = data.terraform_remote_state.eks.outputs.cluster_name
-}
-
 # EKS cluster info
 data "aws_eks_cluster" "eks" {
-  name = local.cluster_name
+  name = data.terraform_remote_state.eks.outputs.cluster_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = local.cluster_name
+  name = data.aws_eks_cluster.eks.outputs.cluster_name
 }
 
-# Kubernetes provider
+# Kubernetes provider (aliased)
+provider "kubernetes" {
+  alias                  = "eks"
+  host                   = data.aws_eks_cluster.eks.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks.token
+}
+
+# Helm provider using the aliased Kubernetes provider
 provider "helm" {
-  kubernetes {
-    host                   = data.aws_eks_cluster.eks.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.eks.token
-  }
+  kubernetes = kubernetes.eks
 }
 
 # Helm release for ArgoCD
