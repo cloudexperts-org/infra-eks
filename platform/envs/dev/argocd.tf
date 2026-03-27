@@ -1,24 +1,25 @@
-# Fetch remote state of EKS cluster
+# Fetch remote state
 data "terraform_remote_state" "eks" {
   backend = "s3"
   config = {
     bucket = "cloudex-terraform-state-bucket"
-    key    = "eks/dev/terraform.tfstate"  # must match your EKS statefile
+    key    = "eks/dev/terraform.tfstate"
     region = "ap-southeast-1"
   }
 }
 
+# AWS provider
 provider "aws" {
   region = "ap-southeast-1"
 }
 
-# EKS cluster info
+# Get EKS cluster info
 data "aws_eks_cluster" "eks" {
   name = data.terraform_remote_state.eks.outputs.cluster_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = data.aws_eks_cluster.eks.outputs.cluster_name
+  name = data.terraform_remote_state.eks.outputs.cluster_name
 }
 
 # Kubernetes provider (aliased)
@@ -34,7 +35,7 @@ provider "helm" {
   kubernetes = kubernetes.eks
 }
 
-# Helm release for ArgoCD
+# Helm release
 resource "helm_release" "argocd" {
   name             = "argocd"
   namespace        = "argocd"
