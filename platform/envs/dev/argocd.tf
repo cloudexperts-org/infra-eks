@@ -13,30 +13,35 @@ provider "aws" {
   region = "ap-southeast-1"
 }
 
+variable "cluster_name" {
+  default = data.terraform_remote_state.eks.outputs.cluster_name
+}
+
+
+# EKS data sources
 data "aws_eks_cluster" "eks" {
-  name = data.terraform_remote_state.eks.outputs.cluster_name
+  name = var.cluster_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = data.aws_eks_cluster.eks.outputs.cluster_name
+  name = var.cluster_name
 }
 
-# Default Helm provider (for general use)
-provider "helm" {
-  alias = "argocd"
-  kubernetes {
-    host                   = data.aws_eks_cluster.eks.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.eks.token
-  }
+# Kubernetes provider
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.eks.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks.token
 }
 
+# Helm provider uses Kubernetes provider automatically
+provider "helm" {}
+
+# Helm release for ArgoCD
 resource "helm_release" "argocd" {
-  name       = "argocd"
-  repository = "https://argoproj.github.io/argo-helm"
-  chart      = "argo-cd"
-  namespace  = "argocd"
-
-  # Use the aliased provider
-  provider = helm.argocd
+  name             = "argocd"
+  namespace        = "argocd"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  create_namespace = true
 }
