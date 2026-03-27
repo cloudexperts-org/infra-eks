@@ -1,3 +1,12 @@
+# Fetch remote state of EKS cluster
+data "terraform_remote_state" "eks" {
+  backend = "s3"
+  config = {
+    bucket = "cloudex-terraform-state-bucket"
+    key    = "eks/dev/terraform.tfstate"  # path to your EKS state
+    region = "ap-southeast-1"
+  }
+}
 
 provider "aws" {
   region = "ap-southeast-1"
