@@ -44,4 +44,4 @@ jobs:
       #  aws eks update-kubeconfig --name my-eks-cluster --region ap-southeast-1
 
       - name: Terraform Apply
-      - run: terraform apply -auto-approve
+        run: terraform apply -auto-approve
